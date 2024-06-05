@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualBasic.Devices;
+using Microsoft.VisualBasic.Devices;
 using MySql.Data.MySqlClient;
 using System.Data;
 using System.IO;
@@ -119,44 +119,61 @@ namespace VALIDATION2
         }
         private void ApplyFilters()
         {
-            {   
-                if (loadedTable == null) return;
-                comboBox2.Enabled = true;
+            if (loadedTable == null) return;
 
-                DataView view = loadedTable.DefaultView;
-                StringBuilder filter = new StringBuilder();
+            DataView view = loadedTable.DefaultView;
+            StringBuilder filter = new StringBuilder();
 
-                if (!string.IsNullOrWhiteSpace(textBox1.Text))
-                {   
-                   
-                    filter.Append($"(QRCODE LIKE '%{textBox1.Text}%' OR TUPCID LIKE '%{textBox1.Text}%'  OR UID LIKE '%{textBox1.Text}%' OR STATUS LIKE '%{textBox1.Text}%')");
-                }
+            if (!string.IsNullOrWhiteSpace(textBox1.Text))
+            {
+                filter.Append($"(QRCODE LIKE '%{textBox1.Text}%' OR TUPCID LIKE '%{textBox1.Text}%' OR UID LIKE '%{textBox1.Text}%' OR STATUS LIKE '%{textBox1.Text}%')");
+            }
 
-
-                if (comboBox2.SelectedItem != "Select Course")
+            if (comboBox2.SelectedItem != null && comboBox2.SelectedItem.ToString() != "Select Course")
+            {
+                if (filter.Length > 0)
                 {
-                    if (filter.Length > 0)
-                    {
-                        filter.Append(" AND ");
-                    }
-                    filter.Append($"QRCODE LIKE'%{comboBox2.SelectedItem}%'");
+                    filter.Append(" AND ");
                 }
+                filter.Append($"QRCODE LIKE '%{comboBox2.SelectedItem}%'");
+            }
 
-                
-                if (checkBox1.Checked) 
+            if (checkBox1.Checked && checkBox2.Checked)
+            {
+                if (filter.Length > 0)
                 {
-                    filter.Append("STATUS = VALIDATED");
+                    filter.Append(" AND ");
                 }
-                if (checkBox2.Checked) 
+                filter.Append("(STATUS = 'VALIDATED' OR STATUS = 'NOT VALIDATED')");
+            }
+            else if (checkBox1.Checked)
+            {
+                if (filter.Length > 0)
                 {
-                    filter.Append("STATUS = NOT VALIDATED'");
+                    filter.Append(" AND ");
                 }
+                filter.Append("STATUS = 'VALIDATED'");
+            }
+            else if (checkBox2.Checked)
+            {
+                if (filter.Length > 0)
+                {
+                    filter.Append(" AND ");
+                }
+                filter.Append("STATUS = 'NOT VALIDATED'");
+            }
 
-
+            try
+            {
                 view.RowFilter = filter.ToString();
                 dataGridView1.DataSource = view;
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to apply filter. Error: {ex.Message}\nFilter: {filter}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
+
 
 
         private DataTable loadedTable;
