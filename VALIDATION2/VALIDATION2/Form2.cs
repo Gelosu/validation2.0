@@ -1,12 +1,12 @@
-using Microsoft.VisualBasic.Devices;
-using MySql.Data.MySqlClient;
-using System.Data;
-using System.IO;
-using System.Text;
-using System.Text.RegularExpressions;
+    using Microsoft.VisualBasic.Devices;
+    using MySql.Data.MySqlClient;
+    using System.Data;
+    using System.IO;
+    using System.Text;
+    using System.Text.RegularExpressions;
 
-namespace VALIDATION2
-{
+    namespace VALIDATION2
+    {
     public partial class Form2 : Form
     {
         private string connectionString = "server=localhost;database=validationfile;uid=root;pwd=12345;";
@@ -58,7 +58,7 @@ namespace VALIDATION2
                     foreach (DataRow row in tables.Rows)
                     {
                         string tableName = row[2].ToString();
-                        if (tableName != "credentials" && tableName != "course" && tableName!="logs")
+                        if (tableName != "credentials" && tableName != "course" && tableName != "logs")
                         {
                             comboBox1.Items.Add(tableName);
                         }
@@ -72,7 +72,7 @@ namespace VALIDATION2
             }
         }
 
-        
+
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
@@ -110,8 +110,8 @@ namespace VALIDATION2
                 }
 
 
-               comboBox2.Enabled= false;
-           
+                comboBox2.Enabled = false;
+                textBox2.Text = "";
 
                 view.RowFilter = filter.ToString();
                 dataGridView1.DataSource = view;
@@ -120,6 +120,7 @@ namespace VALIDATION2
         private void ApplyFilters()
         {
             if (loadedTable == null) return;
+            comboBox2.Enabled = true;
 
             DataView view = loadedTable.DefaultView;
             StringBuilder filter = new StringBuilder();
@@ -163,16 +164,35 @@ namespace VALIDATION2
                 filter.Append("STATUS = 'NOT VALIDATED'");
             }
 
-            try
-            {
-                view.RowFilter = filter.ToString();
-                dataGridView1.DataSource = view;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Failed to apply filter. Error: {ex.Message}\nFilter: {filter}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            view.RowFilter = filter.ToString();
+            dataGridView1.DataSource = view;
+
+            UpdateValidationCounts();
         }
+
+        private void UpdateValidationCounts()
+        {
+            if (loadedTable == null) return;
+
+            int validatedCount = 0;
+            int notValidatedCount = 0;
+
+            foreach (DataRow row in loadedTable.Rows)
+            {
+                string status = row["STATUS"].ToString();
+                if (status == "VALIDATED")
+                {
+                    validatedCount++;
+                }
+                else if (status == "NOT VALIDATED")
+                {
+                    notValidatedCount++;
+                }
+            }
+
+            textBox2.Text = $"Validated: {validatedCount}, Not Validated: {notValidatedCount}";
+        }
+
 
 
 
@@ -193,9 +213,9 @@ namespace VALIDATION2
                     DataTable table = new DataTable();
                     adapter.Fill(table);
 
-                    
+
                     DataRow[] filteredRows = table.Select("QRCODE IS NOT NULL AND QRCODE <> ''");
-                    DataTable filteredTable = table.Clone(); 
+                    DataTable filteredTable = table.Clone();
                     foreach (DataRow row in filteredRows)
                     {
                         filteredTable.ImportRow(row);
@@ -238,7 +258,7 @@ namespace VALIDATION2
         {
             LoadTableNames();
             Loadcourse();
-            
+
         }
         private void button1_Click(object sender, EventArgs e)
         {
@@ -305,13 +325,13 @@ namespace VALIDATION2
                     connection.Open();
                     foreach (DataRow row in table.Rows)
                     {
-                        if(tableName != "faculty")
+                        if (tableName != "faculty")
                         {
                             string qrcode = row[0].ToString();
-                        string tupcid = row[1].ToString();
-                        string uid = row[2].ToString();
+                            string tupcid = row[1].ToString();
+                            string uid = row[2].ToString();
 
-                        
+
                             string checkQuery = $"SELECT COUNT(*) FROM {tableName} WHERE QRCODE = @QRCODE AND TUPCID = @TUPCID AND UID = @UID";
                             using (MySqlCommand checkCmd = new MySqlCommand(checkQuery, connection))
                             {
@@ -362,7 +382,7 @@ namespace VALIDATION2
         }
 
 
-                private DataTable GetDataTableFromCSV(string filePath)
+        private DataTable GetDataTableFromCSV(string filePath)
         {
             DataTable dt = new DataTable();
             using (StreamReader sr = new StreamReader(filePath))
@@ -415,7 +435,7 @@ namespace VALIDATION2
                     while (reader.Read())
                     {
                         string course = reader["COURSE"].ToString();
-                        
+
                         comboBox2.Items.Add(course);
                     }
                 }
@@ -448,7 +468,7 @@ namespace VALIDATION2
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-             if (tableName != "faculty")
+            if (tableName != "faculty")
             {
                 ApplyFilters();
 
@@ -459,5 +479,14 @@ namespace VALIDATION2
             }
         }
 
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
