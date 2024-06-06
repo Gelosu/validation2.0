@@ -39,13 +39,14 @@ namespace VALIDATION2
 
             if (ValidateCredentials(username, password))
             {
-               
-                Form2 form2 = new Form2(); // Assuming you have a Form2
+                LogActivity("Login Successfully");
+                Form2 form2 = new Form2(); 
                 form2.Show();
                 this.Hide();
             }
             else
             {
+                LogActivity("Login Failed");
                 MessageBox.Show("Invalid username or password.", "Login Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -70,6 +71,29 @@ namespace VALIDATION2
                 {
                     MessageBox.Show($"Failed to validate credentials. Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return false;
+                }
+            }
+        }
+
+        private void LogActivity(string message)
+        {
+            string logQuery = "INSERT INTO logs (logs, datetime) VALUES (@log, @datetime)";
+
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    using (MySqlCommand cmd = new MySqlCommand(logQuery, connection))
+                    {
+                        cmd.Parameters.AddWithValue("@log", message);
+                        cmd.Parameters.AddWithValue("@datetime", DateTime.Now);
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Failed to log activity. Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }

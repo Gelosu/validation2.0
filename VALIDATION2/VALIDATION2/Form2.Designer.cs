@@ -42,6 +42,9 @@
             button5 = new Button();
             label2 = new Label();
             textBox2 = new TextBox();
+            button6 = new Button();
+            label3 = new Label();
+            textBox3 = new TextBox();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
             // 
@@ -120,16 +123,17 @@
             // 
             // button3
             // 
-            button3.Location = new Point(578, 389);
+            button3.Location = new Point(502, 389);
             button3.Name = "button3";
-            button3.Size = new Size(75, 23);
+            button3.Size = new Size(151, 23);
             button3.TabIndex = 7;
-            button3.Text = "Save";
+            button3.Text = "NEW SEMESTER";
             button3.UseVisualStyleBackColor = true;
+            button3.Click += button3_Click;
             // 
             // button4
             // 
-            button4.Location = new Point(497, 389);
+            button4.Location = new Point(421, 389);
             button4.Name = "button4";
             button4.Size = new Size(75, 23);
             button4.TabIndex = 8;
@@ -157,7 +161,7 @@
             // 
             // button5
             // 
-            button5.Location = new Point(396, 40);
+            button5.Location = new Point(36, 77);
             button5.Name = "button5";
             button5.Size = new Size(75, 23);
             button5.TabIndex = 11;
@@ -168,25 +172,55 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(386, 77);
+            label2.Location = new Point(328, 77);
             label2.Name = "label2";
-            label2.Size = new Size(85, 15);
+            label2.Size = new Size(68, 15);
             label2.TabIndex = 12;
-            label2.Text = "TOTAL COUNT:";
+            label2.Text = "VALIDATED:";
             // 
             // textBox2
             // 
-            textBox2.Location = new Point(477, 74);
+            textBox2.Location = new Point(393, 74);
             textBox2.Name = "textBox2";
             textBox2.ReadOnly = true;
-            textBox2.Size = new Size(176, 23);
+            textBox2.Size = new Size(78, 23);
             textBox2.TabIndex = 13;
+            textBox2.TextChanged += textBox2_TextChanged;
+            // 
+            // button6
+            // 
+            button6.Location = new Point(267, 389);
+            button6.Name = "button6";
+            button6.Size = new Size(148, 23);
+            button6.TabIndex = 14;
+            button6.Text = "COURSE MANAGEMENT";
+            button6.UseVisualStyleBackColor = true;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(477, 77);
+            label3.Name = "label3";
+            label3.Size = new Size(94, 15);
+            label3.TabIndex = 15;
+            label3.Text = "NOT VALIDATED:";
+            // 
+            // textBox3
+            // 
+            textBox3.Location = new Point(575, 74);
+            textBox3.Name = "textBox3";
+            textBox3.ReadOnly = true;
+            textBox3.Size = new Size(78, 23);
+            textBox3.TabIndex = 16;
             // 
             // Form2
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(687, 424);
+            Controls.Add(textBox3);
+            Controls.Add(label3);
+            Controls.Add(button6);
             Controls.Add(textBox2);
             Controls.Add(label2);
             Controls.Add(button5);
@@ -227,5 +261,8 @@
         private Button button5;
         private Label label2;
         private TextBox textBox2;
+        private Button button6;
+        private Label label3;
+        private TextBox textBox3;
     }
 }

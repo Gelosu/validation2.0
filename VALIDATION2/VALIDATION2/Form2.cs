@@ -1,9 +1,10 @@
-    using Microsoft.VisualBasic.Devices;
+﻿    using Microsoft.VisualBasic.Devices;
     using MySql.Data.MySqlClient;
     using System.Data;
     using System.IO;
     using System.Text;
     using System.Text.RegularExpressions;
+using System.Windows.Forms;
 
     namespace VALIDATION2
     {
@@ -15,11 +16,19 @@
         public Form2()
         {
             InitializeComponent();
-            comboBox1.Text = "Select Course";
             InitializeFileWatcher();
             Loadcourse();
+            
+            this.FormClosing += Form2_FormClosing;
         }
 
+        private void Form2_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                LogActivity("System closed");
+            }
+        }
         private void InitializeFileWatcher()
         {
             fileWatcher = new FileSystemWatcher();
@@ -55,6 +64,7 @@
                     DataTable tables = connection.GetSchema("Tables");
 
                     comboBox1.Items.Clear();
+                    comboBox1.Items.Add("Select Validation");
                     foreach (DataRow row in tables.Rows)
                     {
                         string tableName = row[2].ToString();
@@ -62,6 +72,7 @@
                         {
                             comboBox1.Items.Add(tableName);
                         }
+                       
 
                     }
                 }
@@ -77,11 +88,13 @@
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
             ApplyFilters();
+            LogActivity($"CheckBox1 checked state changed to {checkBox1.Checked}");
 
         }
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
             ApplyFilters();
+            LogActivity($"CheckBox2 checked state changed to {checkBox2.Checked}");
         }
 
         private void dataGridView1_CellContentClick(object sender, EventArgs e)
@@ -93,7 +106,13 @@
             string tableName = comboBox1.SelectedItem.ToString();
             LoadTableData(tableName);
 
+            
+            if (tableName != "faculty")
+            {
+                comboBox2.SelectedIndex = 0;
+            }
         }
+
 
         private void facultyFilters()
         {
@@ -121,6 +140,7 @@
         {
             if (loadedTable == null) return;
             comboBox2.Enabled = true;
+        
 
             DataView view = loadedTable.DefaultView;
             StringBuilder filter = new StringBuilder();
@@ -166,6 +186,7 @@
 
             view.RowFilter = filter.ToString();
             dataGridView1.DataSource = view;
+            LogActivity("Applied filters to the table");
 
             UpdateValidationCounts();
         }
@@ -176,21 +197,32 @@
 
             int validatedCount = 0;
             int notValidatedCount = 0;
+            string selectedCourse = comboBox2.SelectedItem?.ToString();
 
             foreach (DataRow row in loadedTable.Rows)
             {
                 string status = row["STATUS"].ToString();
-                if (status == "VALIDATED")
+                string qrcode = row["QRCODE"].ToString();
+
+               
+                
+
+                if (selectedCourse == "Select Course" || qrcode.Contains(selectedCourse))
                 {
-                    validatedCount++;
-                }
-                else if (status == "NOT VALIDATED")
-                {
-                    notValidatedCount++;
+                    if (status == "VALIDATED")
+                    {
+                        validatedCount++;
+                    }
+                    else if (status == "NOT VALIDATED")
+                    {
+                        notValidatedCount++;
+                    }
                 }
             }
 
-            textBox2.Text = $"Validated: {validatedCount}, Not Validated: {notValidatedCount}";
+            textBox2.Text = $"{validatedCount}";
+            textBox3.Text = $"{notValidatedCount}";
+            LogActivity($"Updated validation counts for course: {selectedCourse}");
         }
 
 
@@ -203,17 +235,24 @@
         {
             this.tableName = tableName;
 
+            if (tableName == "Select Validation")
+            {
+                dataGridView1.DataSource = null;
+                dataGridView1.Rows.Clear();
+                return; 
+            }
+
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
                 try
                 {
                     connection.Open();
-                    string query = $"SELECT * FROM {tableName}";
+                    string query = $"SELECT * FROM `{tableName}`";
                     MySqlDataAdapter adapter = new MySqlDataAdapter(query, connection);
                     DataTable table = new DataTable();
                     adapter.Fill(table);
 
-
+          
                     DataRow[] filteredRows = table.Select("QRCODE IS NOT NULL AND QRCODE <> ''");
                     DataTable filteredTable = table.Clone();
                     foreach (DataRow row in filteredRows)
@@ -222,6 +261,7 @@
                     }
 
                     loadedTable = filteredTable;
+                    LogActivity($"Loaded data for table {tableName}");
 
                     if (tableName == "faculty")
                     {
@@ -229,12 +269,13 @@
                     }
                     else
                     {
+                        dataGridView1.DataSource = loadedTable;
                         ApplyFilters();
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Failed to load table data. Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"Failed to load data for table {tableName}. Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -258,8 +299,15 @@
         {
             LoadTableNames();
             Loadcourse();
+            comboBox1.SelectedIndex = 0;
+            comboBox2.SelectedIndex = 0;
+            LogActivity("Validation Program loaded");
+            
+
 
         }
+
+      
         private void button1_Click(object sender, EventArgs e)
         {
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
@@ -273,6 +321,7 @@
                     DataTable csvData = GetDataTableFromCSV(filePath);
                     CreateDatabaseTable(tableName, csvData);
                     InsertDataIntoDatabaseTable(tableName, csvData);
+                    MessageBox.Show("DATA SUCCESSFULLY UPLOADED");
 
 
                     LoadTableNames();
@@ -280,7 +329,9 @@
                     {
                         comboBox1.SelectedItem = tableName;
                         LoadTableData(tableName);
+                       
                     }
+                    
                 }
             }
         }
@@ -350,6 +401,7 @@
                                         updateCmd.Parameters.AddWithValue("@UID", uid);
                                         updateCmd.ExecuteNonQuery();
                                     }
+                                    LogActivity($"Updated{tableName} ");
                                 }
                                 else
                                 {
@@ -361,6 +413,7 @@
                                         insertCmd.Parameters.AddWithValue("@TUPCID", tupcid);
                                         insertCmd.Parameters.AddWithValue("@UID", uid);
                                         insertCmd.ExecuteNonQuery();
+                                        
                                     }
                                 }
                             }
@@ -408,6 +461,7 @@
 
         private void button2_Click(object sender, EventArgs e)
         {
+            LogActivity("User Log out");
             Form1 form1 = new Form1();
             form1.Show();
             this.Hide();
@@ -417,6 +471,7 @@
         {
             string course = comboBox2.SelectedItem.ToString();
             ApplyFilters();
+            LogActivity($"Selected {comboBox2.SelectedItem}");
 
         }
         private void Loadcourse()
@@ -441,7 +496,7 @@
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Failed to load course data. Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                   
                 }
             }
         }
@@ -452,12 +507,13 @@
         }
         private void refresh()
         {
-            if (comboBox1.SelectedItem != null)
+            if (comboBox1.SelectedItem != "Select Validation")
             {
                 string tableName = comboBox1.SelectedItem.ToString();
                 LoadTableData(tableName);
                 comboBox2.SelectedIndex = 0;
                 textBox1.Text = "";
+                LogActivity($"Reload data of the table {comboBox1.SelectedItem}");
 
             }
             else
@@ -470,12 +526,15 @@
         {
             if (tableName != "faculty")
             {
+                
                 ApplyFilters();
+                
 
             }
             else
             {
                 facultyFilters();
+               
             }
         }
 
@@ -486,7 +545,47 @@
 
         private void button3_Click(object sender, EventArgs e)
         {
+            //dito maglalaro un e kaso idk bat d nagana ung reload part sa combo1..
+            Form3 form3 = new Form3();
+            form3.Form3Closed += Form3_Form3Closed;
+            form3.ShowDialog();
 
+        }
+        private void LogActivity(string message)
+        {
+            string logQuery = "INSERT INTO logs (logs, datetime) VALUES (@log, @datetime)";
+
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    using (MySqlCommand cmd = new MySqlCommand(logQuery, connection))
+                    {
+                        cmd.Parameters.AddWithValue("@log", message);
+                        cmd.Parameters.AddWithValue("@datetime", DateTime.Now);
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Failed to log activity. Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+        
+        //WORKING BUT DOESNT REFRESH PA UNG COMBOBOX1 AFTER ADDING SEMESTER...
+        private void Form3_Form3Closed(object sender, EventArgs e)
+        {
+          
+            this.ReloadForm2();
+        }
+
+        private void ReloadForm2()
+        {
+            
+            MessageBox.Show("New Semester Added Successfully");
+            
         }
     }
 }
