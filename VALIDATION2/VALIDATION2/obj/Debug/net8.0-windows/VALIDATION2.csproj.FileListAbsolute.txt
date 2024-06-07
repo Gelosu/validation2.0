@@ -20,3 +20,7 @@ C:\Users\GELO\source\repos\VALIDATION2\VALIDATION2\bin\Debug\net8.0-windows\VALI
 C:\Users\GELO\source\repos\VALIDATION2\VALIDATION2\bin\Debug\net8.0-windows\VALIDATION2.pdb
 C:\Users\GELO\source\repos\VALIDATION2\VALIDATION2\obj\Debug\net8.0-windows\VALIDATION2.genruntimeconfig.cache
 C:\Users\GELO\source\repos\VALIDATION2\VALIDATION2\obj\Debug\net8.0-windows\ref\VALIDATION2.dll
+C:\Users\GELO\source\repos\VALIDATION2\VALIDATION2\obj\Debug\net8.0-windows\VALIDATION2.Form4.resources
+C:\Users\GELO\source\repos\VALIDATION2\VALIDATION2\obj\Debug\net8.0-windows\VALIDATION2.Form5.resources
+C:\Users\GELO\source\repos\VALIDATION2\VALIDATION2\obj\Debug\net8.0-windows\VALIDATION2.Form6.resources
+C:\Users\GELO\source\repos\VALIDATION2\VALIDATION2\obj\Debug\net8.0-windows\VALIDATION2.Form7.resources

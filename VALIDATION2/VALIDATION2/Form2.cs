@@ -5,6 +5,7 @@
     using System.Text;
     using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using static System.Windows.Forms.DataFormats;
 
     namespace VALIDATION2
     {
@@ -18,7 +19,7 @@ using System.Windows.Forms;
             InitializeComponent();
             InitializeFileWatcher();
             Loadcourse();
-            
+
             this.FormClosing += Form2_FormClosing;
         }
 
@@ -72,7 +73,7 @@ using System.Windows.Forms;
                         {
                             comboBox1.Items.Add(tableName);
                         }
-                       
+
 
                     }
                 }
@@ -106,7 +107,7 @@ using System.Windows.Forms;
             string tableName = comboBox1.SelectedItem.ToString();
             LoadTableData(tableName);
 
-            
+
             if (tableName != "faculty")
             {
                 comboBox2.SelectedIndex = 0;
@@ -140,7 +141,7 @@ using System.Windows.Forms;
         {
             if (loadedTable == null) return;
             comboBox2.Enabled = true;
-        
+
 
             DataView view = loadedTable.DefaultView;
             StringBuilder filter = new StringBuilder();
@@ -204,8 +205,8 @@ using System.Windows.Forms;
                 string status = row["STATUS"].ToString();
                 string qrcode = row["QRCODE"].ToString();
 
-               
-                
+
+
 
                 if (selectedCourse == "Select Course" || qrcode.Contains(selectedCourse))
                 {
@@ -239,7 +240,7 @@ using System.Windows.Forms;
             {
                 dataGridView1.DataSource = null;
                 dataGridView1.Rows.Clear();
-                return; 
+                return;
             }
 
             using (MySqlConnection connection = new MySqlConnection(connectionString))
@@ -252,7 +253,7 @@ using System.Windows.Forms;
                     DataTable table = new DataTable();
                     adapter.Fill(table);
 
-          
+
                     DataRow[] filteredRows = table.Select("QRCODE IS NOT NULL AND QRCODE <> ''");
                     DataTable filteredTable = table.Clone();
                     foreach (DataRow row in filteredRows)
@@ -302,12 +303,12 @@ using System.Windows.Forms;
             comboBox1.SelectedIndex = 0;
             comboBox2.SelectedIndex = 0;
             LogActivity("Validation Program loaded");
-            
+
 
 
         }
 
-      
+
         private void button1_Click(object sender, EventArgs e)
         {
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
@@ -329,9 +330,9 @@ using System.Windows.Forms;
                     {
                         comboBox1.SelectedItem = tableName;
                         LoadTableData(tableName);
-                       
+
                     }
-                    
+
                 }
             }
         }
@@ -401,7 +402,7 @@ using System.Windows.Forms;
                                         updateCmd.Parameters.AddWithValue("@UID", uid);
                                         updateCmd.ExecuteNonQuery();
                                     }
-                                    LogActivity($"Updated{tableName} ");
+                                    
                                 }
                                 else
                                 {
@@ -413,7 +414,7 @@ using System.Windows.Forms;
                                         insertCmd.Parameters.AddWithValue("@TUPCID", tupcid);
                                         insertCmd.Parameters.AddWithValue("@UID", uid);
                                         insertCmd.ExecuteNonQuery();
-                                        
+
                                     }
                                 }
                             }
@@ -481,7 +482,7 @@ using System.Windows.Forms;
                 try
                 {
                     connection.Open();
-                    string query = "SELECT COURSE FROM course";
+                    string query = "SELECT * FROM course WHERE STATUS='ENABLED'";
                     MySqlCommand cmd = new MySqlCommand(query, connection);
                     MySqlDataReader reader = cmd.ExecuteReader();
 
@@ -496,7 +497,7 @@ using System.Windows.Forms;
                 }
                 catch (Exception ex)
                 {
-                   
+
                 }
             }
         }
@@ -526,15 +527,15 @@ using System.Windows.Forms;
         {
             if (tableName != "faculty")
             {
-                
+
                 ApplyFilters();
-                
+
 
             }
             else
             {
                 facultyFilters();
-               
+
             }
         }
 
@@ -545,7 +546,7 @@ using System.Windows.Forms;
 
         private void button3_Click(object sender, EventArgs e)
         {
-            //dito maglalaro un e kaso idk bat d nagana ung reload part sa combo1..
+
             Form3 form3 = new Form3();
             form3.Form3Closed += Form3_Form3Closed;
             form3.ShowDialog();
@@ -573,19 +574,38 @@ using System.Windows.Forms;
                 }
             }
         }
-        
-        //WORKING BUT DOESNT REFRESH PA UNG COMBOBOX1 AFTER ADDING SEMESTER...
+
+
         private void Form3_Form3Closed(object sender, EventArgs e)
         {
-          
-            this.ReloadForm2();
+
+            LoadTableNames();
+
+            comboBox1.SelectedIndex = 0;
         }
 
-        private void ReloadForm2()
+        private void Form4_Form4Closed(object sender, EventArgs e)
         {
+
+            Loadcourse();
             
-            MessageBox.Show("New Semester Added Successfully");
-            
+        }
+
+       
+        private void Form6_Form6Closed(object sender, EventArgs e)
+        {
+
+            Loadcourse();
+        }
+
+        
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            Form4 form4 = new Form4();
+            form4.Show();
+            form4.Form4Closed += Form4_Form4Closed;
         }
     }
 }
+
