@@ -139,6 +139,7 @@
             button4.TabIndex = 8;
             button4.Text = "LOGS";
             button4.UseVisualStyleBackColor = true;
+            button4.Click += button4_Click;
             // 
             // label1
             // 
@@ -239,7 +240,7 @@
             FormBorderStyle = FormBorderStyle.Fixed3D;
             Name = "Form2";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Form2";
+            Text = "VALIDATION";
             Load += Form2_Load;
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ResumeLayout(false);

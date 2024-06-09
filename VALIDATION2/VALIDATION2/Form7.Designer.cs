@@ -105,7 +105,7 @@
             Controls.Add(label2);
             Controls.Add(label1);
             Name = "Form7";
-            Text = "Form7";
+            Text = "VALIDATION";
             Load += Form7_Load;
             ResumeLayout(false);
             PerformLayout();

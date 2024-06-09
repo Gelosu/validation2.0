@@ -95,7 +95,7 @@
             FormBorderStyle = FormBorderStyle.Fixed3D;
             Name = "Form1";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Form1";
+            Text = "VALIDATION";
             Load += Form1_Load;
             ResumeLayout(false);
             PerformLayout();

@@ -12,8 +12,8 @@
       }
     ],
     "additionalProbingPaths": [
-      "C:\\Users\\GELO\\.dotnet\\store\\|arch|\\|tfm|",
-      "C:\\Users\\GELO\\.nuget\\packages"
+      "C:\\Users\\Gelosu\\.dotnet\\store\\|arch|\\|tfm|",
+      "C:\\Users\\Gelosu\\.nuget\\packages"
     ],
     "configProperties": {
       "System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization": true,

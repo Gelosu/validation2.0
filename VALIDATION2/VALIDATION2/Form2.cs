@@ -402,7 +402,7 @@ using static System.Windows.Forms.DataFormats;
                                         updateCmd.Parameters.AddWithValue("@UID", uid);
                                         updateCmd.ExecuteNonQuery();
                                     }
-                                    
+
                                 }
                                 else
                                 {
@@ -588,23 +588,29 @@ using static System.Windows.Forms.DataFormats;
         {
 
             Loadcourse();
-            
+
         }
 
-       
+
         private void Form6_Form6Closed(object sender, EventArgs e)
         {
 
             Loadcourse();
         }
 
-        
+
 
         private void button6_Click(object sender, EventArgs e)
         {
             Form4 form4 = new Form4();
             form4.Show();
             form4.Form4Closed += Form4_Form4Closed;
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            Form5 form5 = new Form5();
+            form5.Show();
         }
     }
 }
