@@ -39,9 +39,12 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(135, 31);
+            label1.BackColor = Color.FromArgb(51, 51, 51);
+            label1.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label1.ForeColor = Color.Transparent;
+            label1.Location = new Point(116, 18);
             label1.Name = "label1";
-            label1.Size = new Size(94, 15);
+            label1.Size = new Size(133, 21);
             label1.TabIndex = 0;
             label1.Text = "CREATE COURSE";
             label1.Click += label1_Click;
@@ -56,7 +59,7 @@
             // 
             // textBox2
             // 
-            textBox2.Location = new Point(52, 123);
+            textBox2.Location = new Point(52, 135);
             textBox2.Name = "textBox2";
             textBox2.Size = new Size(252, 23);
             textBox2.TabIndex = 2;
@@ -65,38 +68,48 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(160, 61);
+            label2.BackColor = Color.FromArgb(64, 64, 64);
+            label2.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            label2.ForeColor = Color.White;
+            label2.Location = new Point(154, 61);
             label2.Name = "label2";
-            label2.Size = new Size(51, 15);
+            label2.Size = new Size(45, 15);
             label2.TabIndex = 3;
-            label2.Text = "COURSE";
+            label2.Text = "Course";
             label2.Click += label2_Click;
             // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(126, 105);
+            label3.BackColor = Color.FromArgb(64, 64, 64);
+            label3.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            label3.ForeColor = Color.White;
+            label3.Location = new Point(116, 117);
             label3.Name = "label3";
-            label3.Size = new Size(126, 15);
+            label3.Size = new Size(112, 15);
             label3.TabIndex = 4;
-            label3.Text = "COURSE DESCRIPTION";
+            label3.Text = "Course Description";
             label3.Click += label3_Click;
             // 
             // button1
             // 
-            button1.Location = new Point(126, 169);
+            button1.BackColor = Color.Black;
+            button1.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            button1.ForeColor = Color.White;
+            button1.Location = new Point(126, 181);
             button1.Name = "button1";
             button1.Size = new Size(113, 23);
             button1.TabIndex = 5;
-            button1.Text = "ADD COURSE";
-            button1.UseVisualStyleBackColor = true;
+            button1.Text = "Add Course";
+            button1.UseVisualStyleBackColor = false;
             button1.Click += button1_Click;
             // 
             // Form6
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(358, 216);
+            BackColor = Color.FromArgb(51, 51, 51);
+            ClientSize = new Size(358, 221);
             Controls.Add(button1);
             Controls.Add(label3);
             Controls.Add(label2);

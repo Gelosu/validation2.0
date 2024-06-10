@@ -2,7 +2,7 @@
     using MySql.Data.MySqlClient;
     using System.Data;
     using System.IO;
-    using System.Text;
+using System.Text;
     using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using static System.Windows.Forms.DataFormats;
@@ -421,9 +421,34 @@ using static System.Windows.Forms.DataFormats;
                         }
                         else
                         {
+                            if(tableName == "faculty")
+{
+                                string qrcode = row[0].ToString();
+                                string name = row[1].ToString();
+                                string uid = row[2].ToString();
 
-                            string name = row[3].ToString();
+                                string checkQuery = $"SELECT COUNT(*) FROM {tableName} WHERE QRCODE = @QRCODE AND NAME = @NAME AND UID = @UID";
+                                using (MySqlCommand checkCmd = new MySqlCommand(checkQuery, connection))
+                                {
+                                    checkCmd.Parameters.AddWithValue("@QRCODE", qrcode);
+                                    checkCmd.Parameters.AddWithValue("@NAME", name);
+                                    checkCmd.Parameters.AddWithValue("@UID", uid);
+                                    int count = Convert.ToInt32(checkCmd.ExecuteScalar());
 
+                                    if (count == 0) 
+                                    {
+                                        string insertQuery = $"INSERT INTO {tableName} (QRCODE, NAME, UID) " +
+                                                             "VALUES (@QRCODE, @NAME, @UID)";
+                                        using (MySqlCommand insertCmd = new MySqlCommand(insertQuery, connection))
+                                        {
+                                            insertCmd.Parameters.AddWithValue("@QRCODE", qrcode);
+                                            insertCmd.Parameters.AddWithValue("@NAME", name);
+                                            insertCmd.Parameters.AddWithValue("@UID", uid);
+                                            insertCmd.ExecuteNonQuery();
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }

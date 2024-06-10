@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "E:\\CHROME DOWNLOADS\\validation2.0-main\\VALIDATION2\\VALIDATION2\\VALIDATION2.csproj": {}
+    "C:\\Users\\GELO\\source\\repos\\VALIDATION2\\VALIDATION2\\VALIDATION2.csproj": {}
   },
   "projects": {
-    "E:\\CHROME DOWNLOADS\\validation2.0-main\\VALIDATION2\\VALIDATION2\\VALIDATION2.csproj": {
+    "C:\\Users\\GELO\\source\\repos\\VALIDATION2\\VALIDATION2\\VALIDATION2.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\CHROME DOWNLOADS\\validation2.0-main\\VALIDATION2\\VALIDATION2\\VALIDATION2.csproj",
+        "projectUniqueName": "C:\\Users\\GELO\\source\\repos\\VALIDATION2\\VALIDATION2\\VALIDATION2.csproj",
         "projectName": "VALIDATION2",
-        "projectPath": "E:\\CHROME DOWNLOADS\\validation2.0-main\\VALIDATION2\\VALIDATION2\\VALIDATION2.csproj",
-        "packagesPath": "C:\\Users\\Gelosu\\.nuget\\packages\\",
-        "outputPath": "E:\\CHROME DOWNLOADS\\validation2.0-main\\VALIDATION2\\VALIDATION2\\obj\\",
+        "projectPath": "C:\\Users\\GELO\\source\\repos\\VALIDATION2\\VALIDATION2\\VALIDATION2.csproj",
+        "packagesPath": "C:\\Users\\GELO\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\GELO\\source\\repos\\VALIDATION2\\VALIDATION2\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Gelosu\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\GELO\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
